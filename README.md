@@ -87,7 +87,7 @@ No backend services are currently used.
 ---
 
 ## Contributors
-- Juan Sebastian Gomez
+- Sebastian
 - Mattias
 
 ---
