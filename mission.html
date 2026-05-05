@@ -1,20 +1,171 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Define Your Mission</title>
+    <title>Drone Configurator – Define Your Mission</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            background-color: #f4f6f8;
+            color: #1a1a1a;
+        }
+
+        .top-nav {
+            position: sticky;
+            top: 0;
+            z-index: 1100;
+            background-color: #111;
+            padding: 10px 20px;
+            display: flex;
+            gap: 20px;
+        }
+
+        .top-nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        header {
+            position: sticky;
+            top: 40px;
+            z-index: 1000;
+            background-color: #111;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        section {
+            max-width: 900px;
+            margin: 40px auto;
+            background: white;
+            padding: 32px;
+            border-radius: 6px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        select, button {
+            margin-top: 5px;
+            padding: 8px;
+        }
+
+        button {
+            background: #111;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: 0.85;
+        }
+
+        .desc {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
+
 <body>
 
-<nav style="background:#111;padding:10px;">
-    <a href="index.html" style="color:white;margin-right:20px;">About Us</a>
-    <a href="mission.html" style="color:white;">Define Your Mission</a>
+<nav class="top-nav">
+    <a href="index.html">About Us</a>
+    <a href="mission.html">Define Your Mission</a>
 </nav>
 
-<h1>Define Your Mission</h1>
-<p>This page will host the drone mission configurator.</p>
+<header>
+    <h1>Define Your Mission</h1>
+    <p>Specify requirements and generate a validated drone definition</p>
+</header>
+
+<section>
+    <label>Payload</label><br>
+    <select id="payload">
+        <option value="">Select</option>
+        <option value="300">0–300 g</option>
+        <option value="800">300–800 g</option>
+        <option value="1500">800–1500 g</option>
+    </select>
+    <p class="desc">Additional mass carried by the drone (camera, sensor, cargo).</p>
+
+    <label>Desired Endurance</label><br>
+    <select id="endurance">
+        <option value="">Select</option>
+        <option value="30">20–30 min</option>
+        <option value="45">30–45 min</option>
+        <option value="60">45–60 min</option>
+    </select>
+    <p class="desc">Target flight time under cruise conditions.</p>
+
+    <label>Maximum Footprint</label><br>
+    <select id="size">
+        <option value="">Select</option>
+        <option value="35">≤ 35 cm</option>
+        <option value="45">≤ 45 cm</option>
+        <option value="60">≤ 60 cm</option>
+    </select>
+    <p class="desc">Maximum motor‑to‑motor size constraint.</p>
+
+    <button onclick="generateDrone()">Generate Drone Definition</button>
+
+    <div id="droneResult" style="margin-top:30px;"></div>
+</section>
+
+<script>
+function generateDrone() {
+    const payload = parseInt(document.getElementById("payload").value);
+    const endurance = parseInt(document.getElementById("endurance").value);
+    const size = parseInt(document.getElementById("size").value);
+
+    if (!payload || !endurance || !size) {
+        document.getElementById("droneResult").innerHTML =
+            "<p style='color:red;'>Please define all mission parameters.</p>";
+        return;
+    }
+
+    let batteryWeight, batteryLabel;
+    if (endurance <= 30) {
+        batteryWeight = 650;
+        batteryLabel = "OVONIC 6S 5200 mAh";
+    } else if (endurance <= 45) {
+        batteryWeight = 817;
+        batteryLabel = "OVONIC 6S 6000 mAh";
+    } else {
+        batteryWeight = 826;
+        batteryLabel = "OVONIC 6S 7000 mAh";
+    }
+
+    let frameWeight = size <= 35 ? 180 : size <= 45 ? 260 : 360;
+    let auw = payload + batteryWeight + frameWeight + 180 + 320;
+
+    let requiredThrust = (auw * 2) / 4;
+    let status = requiredThrust < 1330 ? "✅ PASS" :
+                 requiredThrust <= 1900 ? "⚠️ MARGINAL" : "❌ FAIL";
+
+    document.getElementById("droneResult").innerHTML = `
+        <h3>Generated Drone Definition</h3>
+        <ul>
+            <li><strong>Frame:</strong> Long‑range quad (${size} cm class)</li>
+            <li><strong>Motor:</strong> EMAX ECO II 2207 – 1700KV</li>
+            <li><strong>Battery:</strong> ${batteryLabel} (~${batteryWeight} g)</li>
+            <li><strong>Estimated AUW:</strong> ${Math.round(auw)} g</li>
+            <li><strong>Required thrust per motor:</strong> ${Math.round(requiredThrust)} g</li>
+            <li><strong>Validation:</strong> ${status}</li>
+        </ul>
+    `;
+}
+</script>
 
 </body>
 </html>
