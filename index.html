@@ -185,21 +185,45 @@ function generateDrone() {
     }
 
 // ============================
+// BATTERY SELECTION (OVONIC)
+// ============================
+
+let batteryWeight;
+let batteryLabel;
+
+if (endurance <= 30) {
+    batteryWeight = 650; // grams
+    batteryLabel = "OVONIC 6S 5200 mAh";
+} else if (endurance <= 45) {
+    batteryWeight = 817; // grams
+    batteryLabel = "OVONIC 6S 6000 mAh";
+} else {
+    batteryWeight = 826; // grams
+    batteryLabel = "OVONIC 6S 7000 mAh";
+}
+``
+
+// ============================
 // WEIGHT ESTIMATION (AUW)
 // ============================
 
+
 // Frame weight estimation (grams)
-let frameWeight = size <= 35 ? 180 : size <= 45 ? 260 : 360;
+let frameWeight = size <= 35 ? 180
+                : size <= 45 ? 260
+                : 360;
 
-// Battery weight estimation (grams)
-let batteryWeight = endurance <= 20 ? 450 : endurance <= 40 ? 750 : 1100;
-
-// Fixed systems weight (grams)
+// Fixed systems (grams)
 let electronicsWeight = 180;   // FC + GPS + RX + VTX
-let motorsEscWeight = 320;     // 4x ECO II 2207 + ESCs
+let motorsEscWeight  = 320;    // 4x ECO II 2207 + ESCs
 
 // All-Up Weight (AUW)
-let auw = payload + frameWeight + batteryWeight + electronicsWeight + motorsEscWeight;
+let auw = payload
+        + frameWeight
+        + batteryWeight   // OVONIC real battery weight
+        + electronicsWeight
+        + motorsEscWeight;
+
 
 // ============================
 // THRUST CALCULATION
@@ -272,7 +296,7 @@ if (requiredThrustPerMotor < motorMaxThrust * 0.7) {
             <li><strong>Frame:</strong> ${frameClass}</li>
             <li><strong>Motors:</strong> ${motorClass}</li>
             <li><strong>ESC:</strong> ${escClass}</li>
-            <li><strong>Battery:</strong> ${battery}</li>
+            <li><strong>Battery:</strong> ${batteryLabel} (~${batteryWeight} g)</li>
             <li><strong>Flight Controller:</strong> ${fc}</li>
         </ul>
         <h4>Thrust Validation – EMAX ECO II 2207 (1700KV)</h4>
