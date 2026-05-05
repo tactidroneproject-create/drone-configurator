@@ -111,63 +111,137 @@
     </p>
 </section>
 
+
 <section>
-    <h2>Simple Configuration (temporary)</h2>
+    <h2>Define Your Mission</h2>
 
-    <label>Frame</label><br>
-    <select id="frame">
-        <option value="">Select frame</option>
-        <option value="GEPRC LC75 – 7.5 inch">GEPRC LC75 – 7.5 inch</option>
+    <label>Payload</label><br>
+    <select id="payload">
+        <option value="">Select payload</option>
+        <option value="300">0–300 g</option>
+        <option value="800">300–800 g</option>
+        <option value="1500">800–1500 g</option>
     </select><br><br>
 
-    <label>Motors</label><br>
-    <select id="motor">
-        <option value="">Select motors</option>
-        <option value="EMAX ECO II 2207 – 1700KV">EMAX ECO II 2207 – 1700KV</option>
+    <label>Desired Endurance</label><br>
+    <select id="endurance">
+        <option value="">Select endurance</option>
+        <option value="20">10–20 min</option>
+        <option value="40">20–40 min</option>
+        <option value="60">40–60 min</option>
     </select><br><br>
 
-    <label>ESC</label><br>
-    <select id="esc">
-        <option value="">Select ESC</option>
-        <option value="T‑Motor F55A Pro II – 55A">T‑Motor F55A Pro II – 55A</option>
+    <label>Maximum Footprint</label><br>
+    <select id="size">
+        <option value="">Select max size</option>
+        <option value="35">≤ 35 cm</option>
+        <option value="45">≤ 45 cm</option>
+        <option value="60">≤ 60 cm</option>
     </select><br><br>
 
-    <button onclick="generateConfig()">Generate Configuration</button>
+    <label>Video</label><br>
+    <select id="video">
+        <option value="no">No</option>
+        <option value="yes">Yes (Digital FPV)</option>
+    </select><br><br>
 
-    <div id="result" style="margin-top:20px;"></div>
+    <label>GPS</label><br>
+    <select id="gps">
+        <option value="no">No</option>
+        <option value="yes">Yes</option>
+    </select><br><br>
+
+    <label>Radio Range</label><br>
+    <select id="radio">
+        <option value="short">&lt; 5 km</option>
+        <option value="medium">5–20 km</option>
+        <option value="long">20+ km</option>
+    </select><br><br>
+
+    <button onclick="generateDrone()">Generate Drone Definition</button>
+
+    <div id="droneResult" style="margin-top:25px;"></div>
 </section>
+
 
 <footer>
     © Prototype project – Drone Configurator
 </footer>
 
-<script>
-function generateConfig() {
-    const frame = document.getElementById("frame").value;
-    const motor = document.getElementById("motor").value;
-    const esc = document.getElementById("esc").value;
 
-    if (!frame || !motor || !esc) {
-        document.getElementById("result").innerHTML =
-            "<p style='color:red;'>Please select all components.</p>";
+<script>
+function generateDrone() {
+    const payload = parseInt(document.getElementById("payload").value);
+    const endurance = parseInt(document.getElementById("endurance").value);
+    const size = parseInt(document.getElementById("size").value);
+    const video = document.getElementById("video").value;
+    const gps = document.getElementById("gps").value;
+    const radio = document.getElementById("radio").value;
+
+    if (!payload || !endurance || !size) {
+        document.getElementById("droneResult").innerHTML =
+            "<p style='color:red;'>Please define payload, endurance and size.</p>";
         return;
     }
 
-    document.getElementById("result").innerHTML = `
-        <h3>Validated Configuration ✅</h3>
+    let frameClass, motorClass, escClass;
+
+    if (size <= 35) {
+        frameClass = "5–6 inch compact frame";
+        motorClass = "2205–2207 motors";
+        escClass = "30–40A ESC";
+    } else if (size <= 45) {
+        frameClass = "7 inch long‑range frame";
+        motorClass = "2207–2306 low‑KV motors";
+        escClass = "45–55A ESC";
+    } else {
+        frameClass = "9–10 inch long‑range frame";
+        motorClass = "2806–3110 low‑KV motors";
+        escClass = "55–65A ESC";
+    }
+
+    let battery;
+    if (endurance <= 20) battery = "6S 3000–4000 mAh";
+    else if (endurance <= 40) battery = "6S 4000–7000 mAh";
+    else battery = "6S 7000–12000 mAh";
+
+    let fc = "F4 class FC";
+    if (gps === "yes" || radio === "long") {
+        fc = "H7 class FC (Matek H743)";
+    }
+
+    let warnings = "";
+    if (endurance === 60 && size <= 35) {
+        warnings += "<li>Requested endurance may be limited by frame size.</li>";
+    }
+    if (payload === 1500 && size <= 35) {
+        warnings += "<li>High payload on compact frame.</li>";
+    }
+
+    document.getElementById("droneResult").innerHTML = `
+        <h3>Generated Drone Definition ✅</h3>
+
         <ul>
-            <li><strong>Frame:</strong> ${frame}</li>
-            <li><strong>Motors:</strong> ${motor}</li>
-            <li><strong>ESC:</strong> ${esc}</li>
+            <li><strong>Frame:</strong> ${frameClass}</li>
+            <li><strong>Motors:</strong> ${motorClass}</li>
+            <li><strong>ESC:</strong> ${escClass}</li>
+            <li><strong>Battery:</strong> ${battery}</li>
+            <li><strong>Flight Controller:</strong> ${fc}</li>
         </ul>
 
-        <p>
-            This configuration is based on a known compatible setup and serves
-            as a reference baseline.
-        </p>
+        <h4>Fixed Avionics</h4>
+        <ul>
+            <li>GPS: BN‑880</li>
+            <li>Radio: ExpressLRS</li>
+            <li>Video: ${video === "yes" ? "Walksnail HD" : "None"}</li>
+        </ul>
+
+        ${warnings ? `<h4>Engineering Warnings</h4><ul>${warnings}</ul>` : ""}
     `;
 }
 </script>
+
+
 
 </body>
 </html>
