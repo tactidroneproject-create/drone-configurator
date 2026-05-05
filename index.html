@@ -54,8 +54,21 @@
             color: #555;
             font-size: 14px;
         }
+
+        button {
+            padding: 10px 16px;
+            background: #111;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: 0.85;
+        }
     </style>
 </head>
+
 <body>
 
 <header>
@@ -64,68 +77,32 @@
 </header>
 
 <section>
-    <h2>What is this?</h2>
-    <p>
-        Drone Configurator is an early-stage prototype of a web-based tool
-        designed to help users build reliable drone setups using validated
-        components and clear technical rules.
-    </p>
-</section>
-
-<section>
-    <h2>What problem does it solve?</h2>
-    <ul>
-        <li>Fragmented and unreliable information</li>
-        <li>Component incompatibility</li>
-        <li>High learning and trial-and-error costs</li>
-        <li>Low-quality recommendations</li>
-    </ul>
-</section>
-
-<section>
-    <h2>How does it work?</h2>
-    <ul>
-        <li>Select a use case (long range, payload, FPV, etc.)</li>
-        <li>Choose validated components</li>
-        <li>Automatically check compatibility</li>
-        <li>Receive purchasing links and technical notes</li>
-    </ul>
-</section>
-
-<section>
     <h2>Status</h2>
     <p>
-        🚧 This is a prototype under active development.
-        The configurator logic will be introduced incrementally.
+        🚧 This prototype will evolve into a mission-driven drone definition system.
     </p>
 </section>
 
 <section>
-    <h2>Configure Your Drone</h2>
+    <h2>Simple Configuration (temporary)</h2>
 
-    <label for="frame">Frame</label><br>
+    <label>Frame</label><br>
     <select id="frame">
         <option value="">Select frame</option>
-        <option value="GEPRC LC75 7.5 inch">GEPRC LC75 – 7.5 inch</option>
-    </select>
+        <option value="GEPRC LC75 – 7.5 inch">GEPRC LC75 – 7.5 inch</option>
+    </select><br><br>
 
-    <br><br>
-
-    <label for="motor">Motors</label><br>
+    <label>Motors</label><br>
     <select id="motor">
         <option value="">Select motors</option>
-        <option value="EMAX ECO II 2207 1700KV">EMAX ECO II 2207 – 1700KV</option>
-    </select>
+        <option value="EMAX ECO II 2207 – 1700KV">EMAX ECO II 2207 – 1700KV</option>
+    </select><br><br>
 
-    <br><br>
-
-    <label for="esc">ESC</label><br>
+    <label>ESC</label><br>
     <select id="esc">
         <option value="">Select ESC</option>
-        <option value="T-Motor F55A Pro II">T‑Motor F55A Pro II – 55A</option>
-    </select>
-
-    <br><br>
+        <option value="T‑Motor F55A Pro II – 55A">T‑Motor F55A Pro II – 55A</option>
+    </select><br><br>
 
     <button onclick="generateConfig()">Generate Configuration</button>
 
@@ -148,48 +125,22 @@ function generateConfig() {
         return;
     }
 
-
-<script>
-function generateConfig() {
-    const frame = document.getElementById("frame").value;
-    const motor = document.getElementById("motor").value;
-    const esc = document.getElementById("esc").value;
-
-    if (!frame || !motor || !esc) {
-        document.getElementById("result").innerHTML =
-            "<p style='color:red;'>Please select all components.</p>";
-        return;
-    }
-
     document.getElementById("result").innerHTML = `
         <h3>Validated Configuration ✅</h3>
-
         <ul>
             <li><strong>Frame:</strong> ${frame}</li>
             <li><strong>Motors:</strong> ${motor}</li>
             <li><strong>ESC:</strong> ${esc}</li>
         </ul>
 
-        <h4>Why this configuration works</h4>
-        <ul>
-            <li>Frame and motor size are compatible for 7–7.5 inch props</li>
-            <li>ESC current rating matches motor peak requirements</li>
-            <li>6S architecture validated for long-range setups</li>
-        </ul>
-
-        <h4>Recommended suppliers</h4>
-        <ul>
-            <li><a href="#" target="_           <li><auy Motors</a></li>
-            <li>#Buy ESC</a></li>
-        </ul>
-
-        <p style="font-size:14px;color:#666;">
-            Note: This is a reference configuration based on a tested build.
+        <p>
+            This configuration is based on a known compatible setup and serves
+            as a reference baseline.
         </p>
     `;
 }
 </script>
 
-
 </body>
 </html>
+
