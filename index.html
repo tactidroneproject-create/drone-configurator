@@ -3,39 +3,45 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Drone Configurator</title>
+    <title>Drone Configurator – About Us</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <style>
         body {
             font-family: Arial, Helvetica, sans-serif;
             margin: 0;
-            padding: 0;
             background-color: #f4f6f8;
             color: #1a1a1a;
         }
 
+        .top-nav {
+            position: sticky;
+            top: 0;
+            z-index: 1100;
+            background-color: #111;
+            padding: 10px 20px;
+            display: flex;
+            gap: 20px;
+        }
+
+        .top-nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .top-nav a:hover {
+            text-decoration: underline;
+        }
 
         header {
             position: sticky;
-            top: 0;
+            top: 40px;
             z-index: 1000;
-
             background-color: #111;
             color: white;
             padding: 20px;
-
             text-align: center;
-        }
-
-        header h1 {
-            margin: 0;
-            font-size: 28px;
-        }
-
-        header p {
-            margin-top: 8px;
-            color: #cccccc;
         }
 
         section {
@@ -54,282 +60,58 @@
         ul {
             line-height: 1.6;
         }
-
-        footer {
-            text-align: center;
-            padding: 24px;
-            color: #555;
-            font-size: 14px;
-        }
-
-        button {
-            padding: 10px 16px;
-            background: #111;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-
-        button:hover {
-            opacity: 0.85;
-        }
     </style>
 </head>
 
 <body>
 
+<nav class="top-nav">
+    <a href="index.html">About Us</a>
+    <a href="mission.html">Define Your Mission</a>
+</nav>
+
 <header>
     <h1>Drone Configurator</h1>
-    <p>Design and validate reliable drone configurations</p>
+    <p>Mission‑driven drone definition and validation</p>
 </header>
+
 <section>
-    <h2>What is this?</h2>
+    <h2>About Us</h2>
     <p>
-        Drone Configurator is an early-stage prototype of a web-based tool
-        designed to help users build reliable drone setups using validated
-        components and clear technical rules.
+        Drone Configurator is a mission‑driven tool designed to translate
+        operational requirements into physically viable drone architectures.
+        The system is based on engineering constraints and real market‑available components.
     </p>
 </section>
 
 <section>
     <h2>What problem does it solve?</h2>
     <ul>
-        <li>Fragmented and unreliable information</li>
-        <li>Component incompatibility</li>
-        <li>High learning and trial-and-error costs</li>
-        <li>Low-quality recommendations</li>
+        <li>Fragmented and inconsistent drone design information</li>
+        <li>Builds that fail to meet mission requirements</li>
+        <li>High trial‑and‑error cost in payload and endurance optimization</li>
+        <li>Lack of physical validation in online configurators</li>
     </ul>
 </section>
 
 <section>
     <h2>How does it work?</h2>
     <ul>
-        <li>Select a use case (long range, payload, FPV, etc.)</li>
-        <li>Choose validated components</li>
-        <li>Automatically check compatibility</li>
-        <li>Receive purchasing links and technical notes</li>
+        <li>You define mission parameters (payload, endurance, size)</li>
+        <li>The system estimates weight, thrust, and energy requirements</li>
+        <li>Real components are validated against physical limits</li>
+        <li>Unfeasible configurations are explicitly rejected</li>
     </ul>
 </section>
 
 <section>
     <h2>Status</h2>
     <p>
-        🚧 This prototype will evolve into a mission-driven drone definition system.
+        This is an early prototype focused on validating a mission‑centric
+        engineering approach to UAV definition. Future work will include
+        certified builds and professional use cases.
     </p>
 </section>
 
-
-<section>
-    <h2>Define Your Mission</h2>
-
-    <label>Payload</label><br>
-    <select id="payload">
-        <option value="">Select payload</option>
-        <option value="300">0–300 g</option>
-        <option value="800">300–800 g</option>
-        <option value="1500">800–1500 g</option>
-    </select><br><br>
-
-    <label>Desired Endurance</label><br>
-    <select id="endurance">
-        <option value="">Select endurance</option>
-        <option value="20">10–20 min</option>
-        <option value="40">20–40 min</option>
-        <option value="60">40–60 min</option>
-    </select><br><br>
-
-    <label>Maximum Footprint</label><br>
-    <select id="size">
-        <option value="">Select max size</option>
-        <option value="35">≤ 35 cm</option>
-        <option value="45">≤ 45 cm</option>
-        <option value="60">≤ 60 cm</option>
-    </select><br><br>
-
-    <label>Video</label><br>
-    <select id="video">
-        <option value="no">No</option>
-        <option value="yes">Yes (Digital FPV)</option>
-    </select><br><br>
-
-    <label>GPS</label><br>
-    <select id="gps">
-        <option value="no">No</option>
-        <option value="yes">Yes</option>
-    </select><br><br>
-
-    <label>Radio Range</label><br>
-    <select id="radio">
-        <option value="short">&lt; 5 km</option>
-        <option value="medium">5–20 km</option>
-        <option value="long">20+ km</option>
-    </select><br><br>
-
-    <button onclick="generateDrone()">Generate Drone Definition</button>
-
-    <div id="droneResult" style="margin-top:25px;"></div>
-</section>
-
-
-<footer>
-    © Prototype project – Drone Configurator
-</footer>
-
-
-<script>
-function generateDrone() {
-    const payload = parseInt(document.getElementById("payload").value);
-    const endurance = parseInt(document.getElementById("endurance").value);
-    const size = parseInt(document.getElementById("size").value);
-    const video = document.getElementById("video").value;
-    const gps = document.getElementById("gps").value;
-    const radio = document.getElementById("radio").value;
-
-    if (!payload || !endurance || !size) {
-        document.getElementById("droneResult").innerHTML =
-            "<p style='color:red;'>Please define payload, endurance and size.</p>";
-        return;
-    }
-
-// ============================
-// BATTERY SELECTION (OVONIC)
-// ============================
-
-let batteryWeight;
-let batteryLabel;
-
-if (endurance <= 30) {
-    batteryWeight = 650; // grams
-    batteryLabel = "OVONIC 6S 5200 mAh";
-} else if (endurance <= 45) {
-    batteryWeight = 817; // grams
-    batteryLabel = "OVONIC 6S 6000 mAh";
-} else {
-    batteryWeight = 826; // grams
-    batteryLabel = "OVONIC 6S 7000 mAh";
-}
-``
-
-// ============================
-// WEIGHT ESTIMATION (AUW)
-// ============================
-
-// Frame weight estimation (grams)
-let frameWeight = size <= 35 ? 180
-                : size <= 45 ? 260
-                : 360;
-
-// Fixed systems (grams)
-let electronicsWeight = 180;   // FC + GPS + RX + VTX
-let motorsEscWeight  = 320;    // 4x ECO II 2207 + ESCs
-
-// All-Up Weight (AUW)
-let auw = payload
-        + frameWeight
-        + batteryWeight   // OVONIC real battery weight
-        + electronicsWeight
-        + motorsEscWeight;
-
-
-// ============================
-// THRUST CALCULATION
-// ============================
-
-// Rule: Total thrust >= 2 x AUW
-// Quad X: thrust per motor = (AUW * 2) / 4
-let requiredThrustPerMotor = (auw * 2) / 4;
-``
-
-// ============================
-// MOTOR VALIDATION
-// ECO II 2207 1700KV
-// ============================
-
-let motorMaxThrust = 1900; // grams (conservative real-world value)
-let thrustStatus = "";
-let thrustMessage = "";
-
-if (requiredThrustPerMotor < motorMaxThrust * 0.7) {
-    thrustStatus = "✅ PASS";
-    thrustMessage = "Adequate thrust margin for efficiency and control.";
-} else if (requiredThrustPerMotor <= motorMaxThrust) {
-    thrustStatus = "⚠️ MARGINAL";
-    thrustMessage = "Motor can meet thrust requirements but with limited margin.";
-} else {
-    thrustStatus = "❌ FAIL";
-    thrustMessage = "Required thrust exceeds motor capability.";
-}
-
-    
-    
-    let frameClass, motorClass, escClass;
-
-    if (size <= 35) {
-        frameClass = "5–6 inch compact frame";
-        motorClass = "2205–2207 motors";
-        escClass = "30–40A ESC";
-    } else if (size <= 45) {
-        frameClass = "7 inch long‑range frame";
-        motorClass = "2207–2306 low‑KV motors";
-        escClass = "45–55A ESC";
-    } else {
-        frameClass = "9–10 inch long‑range frame";
-        motorClass = "2806–3110 low‑KV motors";
-        escClass = "55–65A ESC";
-    }
-
-    let battery;
-    if (endurance <= 20) battery = "6S 3000–4000 mAh";
-    else if (endurance <= 40) battery = "6S 4000–7000 mAh";
-    else battery = "6S 7000–12000 mAh";
-
-    let fc = "F4 class FC";
-    if (gps === "yes" || radio === "long") {
-        fc = "H7 class FC (Matek H743)";
-    }
-
-    let warnings = "";
-    if (endurance === 60 && size <= 35) {
-        warnings += "<li>Requested endurance may be limited by frame size.</li>";
-    }
-    if (payload === 1500 && size <= 35) {
-        warnings += "<li>High payload on compact frame.</li>";
-    }
-
-    document.getElementById("droneResult").innerHTML = `
-        <h3>Generated Drone Definition ✅</h3>
-
-        <ul>
-            <li><strong>Frame:</strong> ${frameClass}</li>
-            <li><strong>Motors:</strong> ${motorClass}</li>
-            <li><strong>ESC:</strong> ${escClass}</li>
-            <li><strong>Battery:</strong> ${batteryLabel} (~${batteryWeight} g)</li>
-            <li><strong>Flight Controller:</strong> ${fc}</li>
-        </ul>
-        <h4>Thrust Validation – EMAX ECO II 2207 (1700KV)</h4>
-        <ul>
-            <li><strong>Estimated AUW:</strong> ${Math.round(auw)} g</li>
-            <li><strong>Required thrust per motor:</strong> ${Math.round(requiredThrustPerMotor)} g</li>
-            <li><strong>Motor max thrust:</strong> 1900 g</li>
-            <li><strong>Status:</strong> ${thrustStatus}</li>
-</ul>
-<p>${thrustMessage}</p>
-
-        <h4>Fixed Avionics</h4>
-        <ul>
-            <li>GPS: BN‑880</li>
-            <li>Radio: ExpressLRS</li>
-            <li>Video: ${video === "yes" ? "Walksnail HD" : "None"}</li>
-        </ul>
-
-
-        ${warnings ? `<h4>Engineering Warnings</h4><ul>${warnings}</ul>` : ""}
-    `;
-}
-</script>
-
-
-
 </body>
 </html>
-
