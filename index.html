@@ -184,6 +184,53 @@ function generateDrone() {
         return;
     }
 
+// ============================
+// WEIGHT ESTIMATION (AUW)
+// ============================
+
+// Frame weight estimation (grams)
+let frameWeight = size <= 35 ? 180 : size <= 45 ? 260 : 360;
+
+// Battery weight estimation (grams)
+let batteryWeight = endurance <= 20 ? 450 : endurance <= 40 ? 750 : 1100;
+
+// Fixed systems weight (grams)
+let electronicsWeight = 180;   // FC + GPS + RX + VTX
+let motorsEscWeight = 320;     // 4x ECO II 2207 + ESCs
+
+// All-Up Weight (AUW)
+let auw = payload + frameWeight + batteryWeight + electronicsWeight + motorsEscWeight;
+
+// ============================
+// THRUST CALCULATION
+// ============================
+
+// Rule: Total thrust >= 2 x AUW
+// Quad X: thrust per motor = (AUW * 2) / 4
+let requiredThrustPerMotor = (auw * 2) / 4;
+``
+
+// ============================
+// MOTOR VALIDATION
+// ECO II 2207 1700KV
+// ============================
+
+let motorMaxThrust = 1900; // grams (conservative real-world value)
+let thrustStatus = "";
+let thrustMessage = "";
+
+if (requiredThrustPerMotor < motorMaxThrust * 0.7) {
+    thrustStatus = "✅ PASS";
+    thrustMessage = "Adequate thrust margin for efficiency and control.";
+} else if (requiredThrustPerMotor <= motorMaxThrust) {
+    thrustStatus = "⚠️ MARGINAL";
+    thrustMessage = "Motor can meet thrust requirements but with limited margin.";
+} else {
+    thrustStatus = "❌ FAIL";
+    thrustMessage = "Required thrust exceeds motor capability.";
+}
+
+    
     let frameClass, motorClass, escClass;
 
     if (size <= 35) {
@@ -228,6 +275,14 @@ function generateDrone() {
             <li><strong>Battery:</strong> ${battery}</li>
             <li><strong>Flight Controller:</strong> ${fc}</li>
         </ul>
+        <h4>Thrust Validation – EMAX ECO II 2207 (1700KV)</h4>
+        <ul>
+            <li><strong>Estimated AUW:</strong> ${Math.round(auw)} g</li>
+            <li><strong>Required thrust per motor:</strong> ${Math.round(requiredThrustPerMotor)} g</li>
+            <li><strong>Motor max thrust:</strong> 1900 g</li>
+            <li><strong>Status:</strong> ${thrustStatus}</li>
+</ul>
+<p>${thrustMessage}</p>
 
         <h4>Fixed Avionics</h4>
         <ul>
@@ -235,6 +290,7 @@ function generateDrone() {
             <li>Radio: ExpressLRS</li>
             <li>Video: ${video === "yes" ? "Walksnail HD" : "None"}</li>
         </ul>
+
 
         ${warnings ? `<h4>Engineering Warnings</h4><ul>${warnings}</ul>` : ""}
     `;
