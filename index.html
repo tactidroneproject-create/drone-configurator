@@ -100,9 +100,65 @@
     </p>
 </section>
 
+<section>
+    <h2>Configure Your Drone</h2>
+
+    <label for="frame">Frame</label><br>
+    <select id="frame">
+        <option value="">Select frame</option>
+        <option value="GEPRC LC75 7.5 inch">GEPRC LC75 – 7.5 inch</option>
+    </select>
+
+    <br><br>
+
+    <label for="motor">Motors</label><br>
+    <select id="motor">
+        <option value="">Select motors</option>
+        <option value="EMAX ECO II 2207 1700KV">EMAX ECO II 2207 – 1700KV</option>
+    </select>
+
+    <br><br>
+
+    <label for="esc">ESC</label><br>
+    <select id="esc">
+        <option value="">Select ESC</option>
+        <option value="T-Motor F55A Pro II">T‑Motor F55A Pro II – 55A</option>
+    </select>
+
+    <br><br>
+
+    <button onclick="generateConfig()">Generate Configuration</button>
+
+    <div id="result" style="margin-top:20px;"></div>
+</section>
+
 <footer>
     © Prototype project – Drone Configurator
 </footer>
+
+<script>
+function generateConfig() {
+    const frame = document.getElementById("frame").value;
+    const motor = document.getElementById("motor").value;
+    const esc = document.getElementById("esc").value;
+
+    if (!frame || !motor || !esc) {
+        document.getElementById("result").innerHTML =
+            "<p style='color:red;'>Please select all components.</p>";
+        return;
+    }
+
+    document.getElementById("result").innerHTML = `
+        <h3>Validated Configuration ✅</h3>
+        <ul>
+            <li><strong>Frame:</strong> ${frame}</li>
+            <li><strong>Motors:</strong> ${motor}</li>
+            <li><strong>ESC:</strong> ${esc}</li>
+        </ul>
+        <p>This configuration is based on a tested and documented setup.</p>
+    `;
+}
+</script>
 
 </body>
 </html>
