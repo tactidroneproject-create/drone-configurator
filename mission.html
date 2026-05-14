@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -7,24 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        /* Mantenemos tu estilo base pero mejoramos la legibilidad */
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: #f4f6f8; color: #1a1a1a; }
+        /* Estilos originales preservados y mejorados */
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background-color: #f4f6f8; color: #1a1a1a; }
         .top-nav { position: sticky; top: 0; z-index: 1100; background-color: #111; padding: 12px 20px; display: flex; gap: 20px; }
         .top-nav a { color: white; text-decoration: none; font-size: 14px; font-weight: 500; }
         header { background-color: #111; color: white; padding: 40px 20px; text-align: center; }
         section { max-width: 900px; margin: -30px auto 40px; background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
         .form-group { margin-bottom: 25px; }
-        label { font-weight: bold; display: block; margin-bottom: 8px; color: #333; }
+        label { font-weight: bold; display: block; margin-bottom: 8px; }
         select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 16px; }
         .desc { font-size: 13px; color: #666; margin-top: 5px; line-height: 1.4; }
         button { width: 100%; background: #000; color: white; border: none; padding: 15px; font-size: 16px; font-weight: bold; cursor: pointer; border-radius: 4px; transition: 0.3s; }
         button:hover { background: #333; }
-        #droneResult { margin-top: 30px; padding: 25px; border-radius: 6px; display: none; }
+        #droneResult { margin-top: 30px; padding: 25px; border-radius: 6px; display: none; line-height: 1.6; }
         .success { background-color: #e8f5e9; border-left: 5px solid #4caf50; }
         .warning { background-color: #fff3e0; border-left: 5px solid #ff9800; }
         .error { background-color: #ffebee; border-left: 5px solid #f44336; }
         .spec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
-        .spec-item { font-size: 14px; }
     </style>
 </head>
 <body>
@@ -35,8 +33,8 @@
 </nav>
 
 <header>
-    <h1>Configurador de Misiones</h1>
-    <p>Ingeniería de precisión basada en componentes EMAX, Matek y Ovonic</p>
+    <h1>Define Your Mission</h1>
+    <p>Especifica los requisitos y genera una definición técnica validada</p>
 </header>
 
 <section>
@@ -44,30 +42,30 @@
         <label>Carga Útil (Payload)</label>
         <select id="payload">
             <option value="0">Sin carga adicional</option>
-            <option value="300">Cámara Ligera (0–300g)</option>
-            <option value="800">Cámara Profesional / Carga (300–800g)</option>
-            <option value="1500">Carga Táctica (800–1500g)</option>
+            <option value="300">Cámara/Sensor Ligero (0–300g)</option>
+            <option value="800">Cámara Pro / Mecanismo de Suelta (300–800g)</option>
+            <option value="1500">Carga Táctica Pesada (800–1500g)</option>
         </select>
-        <p class="desc">Cámaras (como la Walksnail de 3g [1]), sensores o carga útil que llevará el dron.</p>
+        <p class="desc">Masa adicional como cámaras o el servo MG996 de tu prototipo [11, 12].</p>
     </div>
 
     <div class="form-group">
-        <label>Misión (Autonomía Deseada)</label>
+        <label>Resistencia Deseada (Autonomía)</label>
         <select id="endurance">
-            <option value="20">FPV Freestyle / Racing (hasta 20 min)</option>
-            <option value="40">Long Range / Vigilancia (20–40 min)</option>
-            <option value="60">Misiones de Resistencia (40–60 min)</option>
+            <option value="30">20–30 min (Batería Estándar)</option>
+            <option value="45">30–45 min (Long Range)</option>
+            <option value="60">45–60 min (Alta Capacidad)</option>
         </select>
-        <p class="desc">Basado en la densidad energética de la serie Ovonic Roam [2].</p>
+        <p class="desc">Tiempo de vuelo estimado basado en la eficiencia de los motores EMAX [13, 14].</p>
     </div>
 
     <div class="form-group">
-        <label>Tamaño del Chasis (Frame)</label>
+        <label>Tamaño del Chasis (Footprint)</label>
         <select id="size">
-            <option value="7">7.5 pulgadas (GEPRC LC75)</option>
-            <option value="10">10 pulgadas (QWinOut LX10)</option>
+            <option value="35">≤ 35 cm (GEPRC LC75 7.5")</option>
+            <option value="45">≤ 45 cm (QWinOut LX10 10")</option>
         </select>
-        <p class="desc">El prototipo LC75 pesa 266g [3], mientras que el LX10 de 10" pesa 261g [4].</p>
+        <p class="desc">Limitación de tamaño motor a motor [15, 16].</p>
     </div>
 
     <button onclick="generateDrone()">Generar Definición Técnica</button>
@@ -76,77 +74,79 @@
 </section>
 
 <script>
-// Base de datos técnica de Geminus/Prototipo
-const db = {
-    frames: {
-        "7": { name: "GEPRC LC75", weight: 266, price: 85 }, // [3]
-        "10": { name: "QWinOut LX10 V2", weight: 261, price: 95 } // [4]
+// Base de datos técnica extraída de tus fuentes
+const techDB = {
+    avionics: {
+        fc: 7, // Matek H743-Slim [17]
+        esc: 17.5, // T-Motor F55A [18, 19]
+        vtx_kit: 18.4, // Walksnail Avatar (Cámara 3g + VTX 13.4g + Antena 2g) [20-22]
+        gps: 10, // BN-880 [23]
+        props: 21.6, // 4x HQProp 6" (5.4g cada una) [24]
+        misc: 10 // Cables y conectores
     },
     motors: {
-        eco2207: { name: "EMAX ECO II 2207 (1700KV)", weight: 33.4, thrust: 1780, price: 15.99 }, // [5-7]
-        eco2812: { name: "EMAX ECO II 2812 (930KV)", weight: 72, thrust: 2850, price: 20.99 }, // [8, 9]
-        eco3515: { name: "EMAX ECO II 3515 (450KV)", weight: 139, thrust: 6270, price: 35.99 } // [10, 11]
+        standard: { name: "EMAX ECO II 2207 (1700KV)", weight: 33.4, maxThrust: 1780, price: 15.99 }, // [13, 25]
+        heavy: { name: "EMAX ECO II 2812 (930KV)", weight: 72, maxThrust: 2850, price: 20.99 } // [14, 26]
     },
     batteries: {
-        "20": { name: "Ovonic 6S 5500mAh", weight: 753, price: 65 }, // [12]
-        "40": { name: "Ovonic Roam 6S 6500mAh", weight: 777, price: 89 }, // [13]
-        "60": { name: "Ovonic Dual 6S 6500mAh (Parallel)", weight: 1554, price: 178 } // Peso x2
-    },
-    avionicsWeight: 7 + 17.5 + 18.4 + 10 + 3 + 21.6 // FC+ESC+VTX+GPS+RX+Props [14-19]
+        "30": { name: "Ovonic Roam 6S 5500mAh", capacityAh: 5.5, weight: 753, price: 65 }, // [27]
+        "45": { name: "Ovonic Roam 6S 6500mAh", capacityAh: 6.5, weight: 777, price: 89 }, // [28]
+        "60": { name: "Ovonic Roam 6S 8000mAh", capacityAh: 8.0, weight: 826, price: 110 } // [8, 29]
+    }
 };
 
 function generateDrone() {
-    const payload = parseInt(document.getElementById("payload").value) || 0;
-    const enduranceChoice = document.getElementById("endurance").value;
+    const payload = parseInt(document.getElementById("payload").value);
+    const endurance = document.getElementById("endurance").value;
     const size = document.getElementById("size").value;
 
-    // 1. Pesos exactos de los componentes (según tus fuentes)
-    const weights = {
-        frame: size === "7" ? 266 : 261, // GEPRC LC75 [4] vs LX10 [13]
-        motors: size === "7" ? 33.4 * 4 : 72 * 4, // ECO II 2207 [7] vs 2812 [14]
-        avionics: 7 + 17.5 + 16.4 + 10 + 3 + 21.6, // FC+ESC+VTX+GPS+RX+Props [5, 8-10, 15, 16]
-        battery: enduranceChoice === "60" ? 1554 : 777 // Ovonic 6500mAh 6S [6]
-    };
-
-    const auw = weights.frame + weights.motors + weights.avionics + weights.battery + payload;
+    const battery = techDB.batteries[endurance];
+    const frameWeight = size === "35" ? 266 : 261; // LC75 [30] vs LX10 [16]
+    const avionicsTotal = Object.values(techDB.avionics).reduce((a, b) => a + b, 0);
+    
+    // Selección de motor: Si el frame es grande o la carga supera 800g, usamos el 2812
+    const motor = (size === "45" || payload >= 800) ? techDB.motors.heavy : techDB.motors.standard;
+    
+    // Cálculo de Peso Total (AUW)
+    const auw = payload + battery.weight + frameWeight + (motor.weight * 4) + avionicsTotal;
+    
+    // Lógica de Autonomía Basada en Hover
     const hoverThrustNeeded = auw / 4;
+    // Consumo estimado en hover para ECO II 2207 (aprox 2.7A para 300g de empuje) [13, 31]
+    const hoverAmpsPerMotor = 2.7 + (Math.max(0, hoverThrustNeeded - 300) * 0.012);
+    const totalSystemAmps = (hoverAmpsPerMotor * 4) + 1.2; // +1.2A para electrónica
+    const estFlightTime = (battery.capacityAh * 0.8 * 60) / totalSystemAmps;
 
-    // 2. Mapeo de consumo basado en tablas EMAX (Thrust -> Amperios) [1-3]
-    // Ejemplo para ECO II 2207 1700KV con HQ 6x3x3:
-    // 300g thrust = ~2.7A | 500g thrust = ~5.3A
-    function getHoverAmps(thrust) {
-        if (size === "7") {
-            // Interpolación simple: 2.7A base + 0.013A por cada gramo extra sobre 300g
-            return 2.7 + (Math.max(0, thrust - 300) * 0.013);
-        } else {
-            // Motores 2812 consumen aprox 2.6A para 300g de empuje [17]
-            return 2.6 + (Math.max(0, thrust - 300) * 0.011);
-        }
-    }
+    // Validación de Empuje
+    const totalMaxThrust = motor.maxThrust * 4;
+    const thrustRatio = totalMaxThrust / auw;
+    
+    let statusClass = "success";
+    let statusText = "✅ APTO: Configuración óptima.";
+    if (thrustRatio < 1.8) { statusClass = "error"; statusText = "❌ FALLO: Demasiado pesado para estos motores."; }
+    else if (thrustRatio < 2.5) { statusClass = "warning"; statusText = "⚠️ MARGINAL: Rendimiento limitado."; }
 
-    const motorAmps = getHoverAmps(hoverThrustNeeded);
-    const totalSystemAmps = (motorAmps * 4) + 0.8; // +0.8A para FC/VTX en vuelo
-
-    // 3. Cálculo de autonomía (Capacidad 6.5Ah * 80% seguridad * 60 min) / Amperios
-    const capacityAh = enduranceChoice === "60" ? 13.0 : 6.5; 
-    const estimatedMinutes = (capacityAh * 0.8 * 60) / totalSystemAmps;
-
-    // 4. Mostrar Resultados
     const resultDiv = document.getElementById("droneResult");
     resultDiv.style.display = "block";
+    resultDiv.className = statusClass;
+    
     resultDiv.innerHTML = `
-        <div style="padding:20px; border-radius:8px; background:#f9f9f9; border:1px solid #ddd;">
-            <h3 style="margin-top:0;">Resultado de la Misión</h3>
-            <p><strong>Peso Total (AUW):</strong> ${Math.round(auw)} g</p>
-            <p><strong>Empuje Necesario por Motor:</strong> ${Math.round(hoverThrustNeeded)} g</p>
-            <p style="font-size:1.2em; color:#d32f2f;">
-                <strong>Autonomía Estimada:</strong> ${Math.floor(estimatedMinutes)} min
-            </p>
-            <p class="desc">Nota: Basado en descarga al 80% de la batería Ovonic 6500mAh [12] y eficiencia de motores EMAX [1].</p>
+        <h3>Definición Técnica Generada</h3>
+        <p><strong>Estado:</strong> ${statusText}</p>
+        <div class="spec-grid">
+            <div class="spec-item"><strong>Frame:</strong> ${size === "35" ? "GEPRC LC75" : "LX10 V2"} (${frameWeight}g)</div>
+            <div class="spec-item"><strong>Motores:</strong> 4x ${motor.name}</div>
+            <div class="spec-item"><strong>Batería:</strong> ${battery.name} (${battery.weight}g)</div>
+            <div class="spec-item"><strong>Autonomía Est.:</strong> ~${Math.floor(estFlightTime)} min</div>
         </div>
+        <hr style="margin:20px 0; border:0; border-top:1px solid #ddd;">
+        <p><strong>Peso Total Est. (AUW):</strong> ${Math.round(auw)} g</p>
+        <p><strong>Relación Empuje/Peso:</strong> ${thrustRatio.toFixed(2)}:1</p>
+        <p><strong>Costo Est. Componentes:</strong> $${(frameWeight/2 + (motor.price * 4) + battery.price + 250).toFixed(2)}</p>
     `;
 }
 </script>
 
 </body>
+</html>
 </html>
