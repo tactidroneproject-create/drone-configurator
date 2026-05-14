@@ -140,6 +140,29 @@ function generateDrone() {
     resultDiv.style.display = "block";
     resultDiv.className = statusClass;
     
+    // INSERTAR AQUÍ LA LLAMADA LEGAL
+    const legal = getLegalProfile(auw);
+
+    const resultDiv = document.getElementById("droneResult");
+    resultDiv.style.display = "block";
+    resultDiv.className = statusClass;
+    
+    resultDiv.innerHTML = `
+        <h3>Definición Técnica Generada</h3>
+        <!-- ... tus otros campos de Motores, Batería, etc ... -->
+        
+        <div style="margin-top:15px; border-top:1px solid #ccc; padding-top:10px; font-size:0.9em; background: rgba(255,255,255,0.5); padding: 10px; border-radius: 5px;">
+            <h4 style="margin:0 0 5px 0;"><i class="fas fa-gavel"></i> Perfil Legal AESA</h4>
+            <p style="margin:2px 0;"><strong>Categoría:</strong> Abierta - Subcategoría ${legal.subcategory}</p>
+            <p style="margin:2px 0;"><strong>Formación:</strong> ${legal.requirements}</p>
+            <p style="margin:2px 0;"><strong>Registro:</strong> ${legal.registration}</p>
+            <p style="margin:2px 0; color: #d32f2f;"><strong>Limitación:</strong> ${legal.distance}</p>
+        </div>
+
+        <hr style="margin:20px 0; border:0; border-top:1px solid #ddd;">
+        <p><strong>Peso Total Est. (AUW):</strong> ${Math.round(auw)} g</p>
+        <!-- ... resto del código ... -->
+    `;
     resultDiv.innerHTML = `
         <h3>Definición Técnica Generada</h3>
         <p><strong>Estado:</strong> ${statusText}</p>
