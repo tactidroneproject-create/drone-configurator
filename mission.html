@@ -96,54 +96,54 @@ const db = {
 };
 
 function generateDrone() {
-    const payload = parseInt(document.getElementById("payload").value);
-    const endurance = document.getElementById("endurance").value;
+    const payload = parseInt(document.getElementById("payload").value) || 0;
+    const enduranceChoice = document.getElementById("endurance").value;
     const size = document.getElementById("size").value;
 
-    const frame = db.frames[size];
-    const battery = db.batteries[endurance];
-    
-    // Selección inteligente de motor según tamaño y carga
-    let motor;
-    if (size === "7") motor = db.motors.eco2207;
-    else if (payload > 800) motor = db.motors.eco3515;
-    else motor = db.motors.eco2812;
+    // 1. Pesos exactos de los componentes (según tus fuentes)
+    const weights = {
+        frame: size === "7" ? 266 : 261, // GEPRC LC75 [4] vs LX10 [13]
+        motors: size === "7" ? 33.4 * 4 : 72 * 4, // ECO II 2207 [7] vs 2812 [14]
+        avionics: 7 + 17.5 + 16.4 + 10 + 3 + 21.6, // FC+ESC+VTX+GPS+RX+Props [5, 8-10, 15, 16]
+        battery: enduranceChoice === "60" ? 1554 : 777 // Ovonic 6500mAh 6S [6]
+    };
 
-    // Cálculo de peso AUW (All Up Weight)
-    const totalMotorWeight = motor.weight * 4;
-    const auw = frame.weight + totalMotorWeight + battery.weight + db.avionicsWeight + payload;
-    
-    // Validación de empuje (Relación Empuje/Peso recomendada > 2.0)
-    const totalThrust = motor.thrust * 4;
-    const thrustWeightRatio = totalThrust / auw;
+    const auw = weights.frame + weights.motors + weights.avionics + weights.battery + payload;
+    const hoverThrustNeeded = auw / 4;
 
-    let resultClass = "success";
-    let statusMsg = "✅ APTO: Configuración balanceada.";
-    if (thrustWeightRatio < 1.8) {
-        resultClass = "error";
-        statusMsg = "❌ FALLO: Peso excesivo. El dron apenas despegará.";
-    } else if (thrustWeightRatio < 2.5) {
-        resultClass = "warning";
-        statusMsg = "⚠️ MARGINAL: Vuelo pesado, requiere pericia.";
+    // 2. Mapeo de consumo basado en tablas EMAX (Thrust -> Amperios) [1-3]
+    // Ejemplo para ECO II 2207 1700KV con HQ 6x3x3:
+    // 300g thrust = ~2.7A | 500g thrust = ~5.3A
+    function getHoverAmps(thrust) {
+        if (size === "7") {
+            // Interpolación simple: 2.7A base + 0.013A por cada gramo extra sobre 300g
+            return 2.7 + (Math.max(0, thrust - 300) * 0.013);
+        } else {
+            // Motores 2812 consumen aprox 2.6A para 300g de empuje [17]
+            return 2.6 + (Math.max(0, thrust - 300) * 0.011);
+        }
     }
 
+    const motorAmps = getHoverAmps(hoverThrustNeeded);
+    const totalSystemAmps = (motorAmps * 4) + 0.8; // +0.8A para FC/VTX en vuelo
+
+    // 3. Cálculo de autonomía (Capacidad 6.5Ah * 80% seguridad * 60 min) / Amperios
+    const capacityAh = enduranceChoice === "60" ? 13.0 : 6.5; 
+    const estimatedMinutes = (capacityAh * 0.8 * 60) / totalSystemAmps;
+
+    // 4. Mostrar Resultados
     const resultDiv = document.getElementById("droneResult");
     resultDiv.style.display = "block";
-    resultDiv.className = resultClass;
-    
     resultDiv.innerHTML = `
-        <h3>Definición del Sistema Táctico</h3>
-        <p><strong>Estado:</strong> ${statusMsg}</p>
-        <div class="spec-grid">
-            <div class="spec-item"><strong>Frame:</strong> ${frame.name} (${frame.weight}g)</div>
-            <div class="spec-item"><strong>Motores:</strong> 4x ${motor.name}</div>
-            <div class="spec-item"><strong>Batería:</strong> ${battery.name} (${battery.weight}g)</div>
-            <div class="spec-item"><strong>Electrónica:</strong> Matek H743 + Walksnail Avatar (${db.avionicsWeight}g)</div>
+        <div style="padding:20px; border-radius:8px; background:#f9f9f9; border:1px solid #ddd;">
+            <h3 style="margin-top:0;">Resultado de la Misión</h3>
+            <p><strong>Peso Total (AUW):</strong> ${Math.round(auw)} g</p>
+            <p><strong>Empuje Necesario por Motor:</strong> ${Math.round(hoverThrustNeeded)} g</p>
+            <p style="font-size:1.2em; color:#d32f2f;">
+                <strong>Autonomía Estimada:</strong> ${Math.floor(estimatedMinutes)} min
+            </p>
+            <p class="desc">Nota: Basado en descarga al 80% de la batería Ovonic 6500mAh [12] y eficiencia de motores EMAX [1].</p>
         </div>
-        <hr style="margin: 20px 0; border: 0; border-top: 1px solid #ccc;">
-        <p><strong>Peso Total Est. (AUW):</strong> ${Math.round(auw)} g</p>
-        <p><strong>Relación Empuje/Peso:</strong> ${thrustWeightRatio.toFixed(2)}:1</p>
-        <p><strong>Costo Estimado Componentes:</strong> $${(frame.price + (motor.price * 4) + battery.price + 250).toFixed(2)}</p>
     `;
 }
 </script>
