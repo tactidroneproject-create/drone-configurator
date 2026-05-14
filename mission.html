@@ -94,7 +94,17 @@ const techDB = {
         "60": { name: "Ovonic Roam 6S 8000mAh", capacityAh: 8.0, weight: 826, price: 110 } // [8, 29]
     }
 };
-
+// Lógica de Normativa AESA (RD 517/2024)
+function getLegalProfile(auw) {
+    let profile = {
+        subcategory: auw < 250 ? "A1 (Construcción Privada)" : "A3 (Vuelo lejos de personas)",
+        requirements: auw < 250 ? "Familiarización con manual" : "Examen online A1/A3",
+        distance: auw < 250 ? "Puede volar sobre personas (no concentraciones)" : "150m de zonas urbanas/recreativas",
+        registration: "Obligatoria (por cámara Walksnail/peso)" // El kit Walksnail tiene cámara [3, 4]
+    };
+    return profile;
+}
+    
 function generateDrone() {
     const payload = parseInt(document.getElementById("payload").value);
     const endurance = document.getElementById("endurance").value;
