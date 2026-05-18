@@ -2,188 +2,190 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Drone Configurator – Define Your Mission</title>
+    <title>Geminus Aerial Systems – Configurador de Misiones</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Iconos para una interfaz profesional -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        /* Estilos originales preservados y mejorados */
-        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background-color: #f4f6f8; color: #1a1a1a; }
-        .top-nav { position: sticky; top: 0; z-index: 1100; background-color: #111; padding: 12px 20px; display: flex; gap: 20px; }
-        .top-nav a { color: white; text-decoration: none; font-size: 14px; font-weight: 500; }
-        header { background-color: #111; color: white; padding: 40px 20px; text-align: center; }
-        section { max-width: 900px; margin: -30px auto 40px; background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: #f4f6f8; color: #1a1a1a; line-height: 1.6; }
+        .top-nav { position: sticky; top: 0; z-index: 1100; background-color: #111; padding: 15px 25px; display: flex; gap: 25px; }
+        .top-nav a { color: white; text-decoration: none; font-size: 14px; font-weight: bold; text-transform: uppercase; transition: 0.3s; }
+        .top-nav a:hover { color: #007bff; }
+        header { background-color: #111; color: white; padding: 60px 20px; text-align: center; }
+        section { max-width: 800px; margin: -40px auto 40px; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
         .form-group { margin-bottom: 25px; }
-        label { font-weight: bold; display: block; margin-bottom: 8px; }
-        select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 16px; }
-        .desc { font-size: 13px; color: #666; margin-top: 5px; line-height: 1.4; }
-        button { width: 100%; background: #000; color: white; border: none; padding: 15px; font-size: 16px; font-weight: bold; cursor: pointer; border-radius: 4px; transition: 0.3s; }
-        button:hover { background: #333; }
-        #droneResult { margin-top: 30px; padding: 25px; border-radius: 6px; display: none; line-height: 1.6; }
-        .success { background-color: #e8f5e9; border-left: 5px solid #4caf50; }
-        .warning { background-color: #fff3e0; border-left: 5px solid #ff9800; }
-        .error { background-color: #ffebee; border-left: 5px solid #f44336; }
-        .spec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+        label { font-weight: bold; display: block; margin-bottom: 10px; color: #333; font-size: 1.1em; }
+        select { width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 8px; font-size: 16px; background-color: #fafafa; }
+        .desc { font-size: 13px; color: #777; margin-top: 8px; font-style: italic; }
+        button { width: 100%; background: #000; color: white; border: none; padding: 18px; font-size: 18px; font-weight: bold; cursor: pointer; border-radius: 8px; transition: 0.3s; margin-top: 10px; }
+        button:hover { background: #333; transform: translateY(-2px); }
+        
+        /* Estilos de los resultados */
+        #droneResult { margin-top: 30px; padding: 30px; border-radius: 10px; display: none; }
+        .success { border-left: 8px solid #4caf50; background-color: #f1f8e9; }
+        .warning { border-left: 8px solid #ff9800; background-color: #fff3e0; }
+        .error { border-left: 8px solid #f44336; background-color: #ffebee; }
+        
+        .spec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; }
+        .spec-item { background: rgba(255,255,255,0.6); padding: 10px; border-radius: 5px; font-size: 14px; }
+        .legal-box { margin-top: 20px; background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #ddd; }
+        h3, h4 { margin-top: 0; color: #111; }
     </style>
 </head>
 <body>
 
 <nav class="top-nav">
-    <a href="index.html">About Us</a>
-    <a href="mission.html">Define Your Mission</a>
+    <a href="index.html">Sobre Nosotros</a>
+    <a href="mission.html">Definir Misión</a>
 </nav>
 
 <header>
-    <h1>Define Your Mission</h1>
-    <p>Especifica los requisitos y genera una definición técnica validada</p>
+    <h1>Configurador Táctico de UAS</h1>
+    <p>Ingeniería de precisión basada en componentes validados</p>
 </header>
 
 <section>
     <div class="form-group">
-        <label>Carga Útil (Payload)</label>
+        <label><i class="fas fa-box-open"></i> Carga Útil (Payload)</label>
         <select id="payload">
-            <option value="0">Sin carga adicional</option>
-            <option value="300">Cámara/Sensor Ligero (0–300g)</option>
-            <option value="800">Cámara Pro / Mecanismo de Suelta (300–800g)</option>
-            <option value="1500">Carga Táctica Pesada (800–1500g)</option>
+            <option value="0">Configuración Limpia (0g)</option>
+            <option value="300">Sensores Ligeros (hasta 300g)</option>
+            <option value="800">Cámara Térmica / Servo MG996 (300-800g)</option>
+            <option value="1500">Carga Pesada (800-1500g)</option>
         </select>
-        <p class="desc">Masa adicional como cámaras o el servo MG996 de tu prototipo [11, 12].</p>
+        <p class="desc">Incluye cámaras, sensores o el sistema de suelta MG996 [1].</p>
     </div>
 
     <div class="form-group">
-        <label>Resistencia Deseada (Autonomía)</label>
+        <label><i class="fas fa-battery-full"></i> Autonomía Deseada</label>
         <select id="endurance">
-            <option value="30">20–30 min (Batería Estándar)</option>
-            <option value="45">30–45 min (Long Range)</option>
-            <option value="60">45–60 min (Alta Capacidad)</option>
+            <option value="30">Vuelo Estándar (20-30 min)</option>
+            <option value="45">Largo Alcance (30-45 min)</option>
+            <option value="60">Misión de Resistencia (45-60 min)</option>
         </select>
-        <p class="desc">Tiempo de vuelo estimado basado en la eficiencia de los motores EMAX [13, 14].</p>
+        <p class="desc">Basado en la densidad energética de la serie Ovonic Roam 6S [2, 3].</p>
     </div>
 
     <div class="form-group">
-        <label>Tamaño del Chasis (Footprint)</label>
+        <label><i class="fas fa-expand-arrows-alt"></i> Tamaño del Frame</label>
         <select id="size">
-            <option value="35">≤ 35 cm (GEPRC LC75 7.5")</option>
-            <option value="45">≤ 45 cm (QWinOut LX10 10")</option>
+            <option value="35">GEPRC LC75 (7.5 pulgadas)</option>
+            <option value="45">QWinOut LX10 V2 (10 pulgadas)</option>
         </select>
-        <p class="desc">Limitación de tamaño motor a motor [15, 16].</p>
+        <p class="desc">El chasis LC75 pesa 266g [4]; el LX10 pesa 261g [5].</p>
     </div>
 
-    <button onclick="generateDrone()">Generar Definición Técnica</button>
+    <button onclick="generateDrone()">CALCULAR CONFIGURACIÓN</button>
 
     <div id="droneResult"></div>
 </section>
 
 <script>
-// Base de datos técnica extraída de tus fuentes
+// BASE DE DATOS TÉCNICA (Basada en tus fuentes)
 const techDB = {
     avionics: {
-        fc: 7, // Matek H743-Slim [17]
-        esc: 17.5, // T-Motor F55A [18, 19]
-        vtx_kit: 18.4, // Walksnail Avatar (Cámara 3g + VTX 13.4g + Antena 2g) [20-22]
-        gps: 10, // BN-880 [23]
-        props: 21.6, // 4x HQProp 6" (5.4g cada una) [24]
-        misc: 10 // Cables y conectores
+        fc: 7, // Matek H743-Slim V3 [6]
+        esc: 17.5, // T-Motor F55A Pro II [7]
+        vtx_kit: 18.4, // Walksnail Avatar (Cámara 3g + VTX 13.4g + Antena 2g) [8-10]
+        gps: 10, // BN-880 [11]
+        props: 22.8, // 4x HQProp 6" (5.7g c/u) [2]
+        recep_misc: 14.3 // Receptor ELRS (3g) [12] + cables/miscelánea
     },
     motors: {
-        standard: { name: "EMAX ECO II 2207 (1700KV)", weight: 33.4, maxThrust: 1780, price: 15.99 }, // [13, 25]
-        heavy: { name: "EMAX ECO II 2812 (930KV)", weight: 72, maxThrust: 2850, price: 20.99 } // [14, 26]
+        standard: { name: "EMAX ECO II 2207 (1700KV)", weight: 33.4, maxThrust: 1780, price: 15.99 }, // [13]
+        heavy: { name: "EMAX ECO II 2812 (930KV)", weight: 72, maxThrust: 2850, price: 20.99 } // [14]
     },
     batteries: {
-        "30": { name: "Ovonic Roam 6S 5500mAh", capacityAh: 5.5, weight: 753, price: 65 }, // [27]
-        "45": { name: "Ovonic Roam 6S 6500mAh", capacityAh: 6.5, weight: 777, price: 89 }, // [28]
-        "60": { name: "Ovonic Roam 6S 8000mAh", capacityAh: 8.0, weight: 826, price: 110 } // [8, 29]
+        "30": { name: "Ovonic 6S 5500mAh", capAh: 5.5, weight: 753, price: 65 }, // [15]
+        "45": { name: "Ovonic 6S 6500mAh", capAh: 6.5, weight: 777, price: 89 }, // [16]
+        "60": { name: "Ovonic 6S 8000mAh", capAh: 8.0, weight: 826, price: 110 } // [17]
     }
 };
-// Lógica de Normativa AESA (RD 517/2024)
+
+// FUNCIÓN DE NORMATIVA AESA (España)
 function getLegalProfile(auw) {
-    let profile = {
-        subcategory: auw < 250 ? "A1 (Construcción Privada)" : "A3 (Vuelo lejos de personas)",
-        requirements: auw < 250 ? "Familiarización con manual" : "Examen online A1/A3",
-        distance: auw < 250 ? "Puede volar sobre personas (no concentraciones)" : "150m de zonas urbanas/recreativas",
-        registration: "Obligatoria (por cámara Walksnail/peso)" // El kit Walksnail tiene cámara [3, 4]
+    return {
+        subcategory: auw < 250 ? "A1 (Construcción Privada)" : "A3 (Construcción Privada)", // [18, 19]
+        requirements: auw < 250 ? "Familiarización con manual" : "Examen A1/A3 (AESA)", // [20, 21]
+        distance: auw < 250 ? "Puede volar sobre personas (no concentraciones)" : "150m lejos de zonas urbanas", // [22, 23]
+        registration: "OBLIGATORIA (Sistema de video Walksnail detectado)", // [24]
+        insurance: "Exento (si es uso recreativo < 20kg)" // [25, 26]
     };
-    return profile;
 }
-    
+
 function generateDrone() {
+    // 1. Obtener entradas
     const payload = parseInt(document.getElementById("payload").value);
     const endurance = document.getElementById("endurance").value;
     const size = document.getElementById("size").value;
 
+    const frameWeight = size === "35" ? 266 : 261;
     const battery = techDB.batteries[endurance];
-    const frameWeight = size === "35" ? 266 : 261; // LC75 [30] vs LX10 [16]
     const avionicsTotal = Object.values(techDB.avionics).reduce((a, b) => a + b, 0);
-    
-    // Selección de motor: Si el frame es grande o la carga supera 800g, usamos el 2812
+
+    // 2. Lógica de selección de motores
+    // Si el payload es alto o el chasis es de 10", usamos los motores pesados
     const motor = (size === "45" || payload >= 800) ? techDB.motors.heavy : techDB.motors.standard;
 
-     // 1. Cálculos técnicos previos (Pesos y Empuje)
-    const payload = parseInt(document.getElementById("payload").value) || 0;
-    const endurance = document.getElementById("endurance").value;
-    const size = document.getElementById("size").value;
-
-    const battery = techDB.batteries[endurance];
-    const frameWeight = size === "35" ? 266 : 261; // Pesos según manual [3, 6]
-    const avionicsTotal = Object.values(techDB.avionics).reduce((a, b) => a + b, 0); // Electrónica del prototipo [2, 7]
-    
-    const motor = (size === "45" || payload >= 800) ? techDB.motors.heavy : techDB.motors.standard;
-    
-    const auw = payload + battery.weight + frameWeight + (motor.weight * 4) + avionicsTotal;
-    
-    const hoverThrustNeeded = auw / 4;
-    const hoverAmpsPerMotor = 2.7 + (Math.max(0, hoverThrustNeeded - 300) * 0.012); // Basado en tablas EMAX [8]
-    const totalSystemAmps = (hoverAmpsPerMotor * 4) + 1.2; 
-    const estFlightTime = (battery.capacityAh * 0.8 * 60) / totalSystemAmps;
-
+    // 3. Cálculos físicos
+    const auw = frameWeight + (motor.weight * 4) + battery.weight + avionicsTotal + payload;
     const totalMaxThrust = motor.maxThrust * 4;
     const thrustRatio = totalMaxThrust / auw;
 
-    // 2. Validación de Estado Visual
-    let statusClass = "success";
-    let statusText = "✅ APTO: Configuración óptima.";
-    if (thrustRatio < 1.8) { statusClass = "error"; statusText = "❌ FALLO: Demasiado pesado."; }
-    else if (thrustRatio < 2.5) { statusClass = "warning"; statusText = "⚠️ MARGINAL: Vuelo pesado."; }
+    // Cálculo de autonomía (Interpolación basada en consumo de ECO II a 300g empuje = 2.7A)
+    const hoverThrustNeeded = auw / 4;
+    const ampsPerMotor = 2.7 + (Math.max(0, hoverThrustNeeded - 300) * 0.012);
+    const totalAmps = (ampsPerMotor * 4) + 1.2; // 1.2A para FC y VTX Walksnail [9, 27]
+    const flightTime = (battery.capAh * 0.8 * 60) / totalAmps; // 80% de descarga por seguridad [28]
 
-    // 3. Llamada al Perfil Legal (AESA) [4]
+    // 4. Determinar estado visual
+    let statusClass = "success";
+    let statusText = "✅ APTO: Sistema equilibrado.";
+    if (thrustRatio < 1.8) { statusClass = "error"; statusText = "❌ FALLO: Peso excesivo."; }
+    else if (thrustRatio < 2.5) { statusClass = "warning"; statusText = "⚠️ CRÍTICO: Rendimiento pobre."; }
+
+    // 5. Perfil Legal
     const legal = getLegalProfile(auw);
 
-    // 4. GENERACIÓN DE LA INTERFAZ (Unificada)
+    // 6. RENDERIZADO DE RESULTADOS
     const resultDiv = document.getElementById("droneResult");
     resultDiv.style.display = "block";
     resultDiv.className = statusClass;
-    
-    // Usamos una sola asignación para evitar que el código se borre a sí mismo
+
     resultDiv.innerHTML = `
-        <h3 style="margin-top:0;">Resumen del Sistema Generado</h3>
+        <h3><i class="fas fa-clipboard-check"></i> Definición de Misión UAS</h3>
         <p><strong>Estado Técnico:</strong> ${statusText}</p>
-        
+
         <div class="spec-grid">
-            <div class="spec-item"><i class="fas fa-microchip"></i> <strong>Frame:</strong> ${size === "35" ? "GEPRC LC75" : "LX10 V2"} (${frameWeight}g)</div>
+            <div class="spec-item"><i class="fas fa-microchip"></i> <strong>Chasis:</strong> ${size === "35" ? "7.5\"" : "10\""} (${frameWeight}g)</div>
             <div class="spec-item"><i class="fas fa-bolt"></i> <strong>Motores:</strong> 4x ${motor.name}</div>
-            <div class="spec-item"><i class="fas fa-battery-full"></i> <strong>Batería:</strong> ${battery.name} (${battery.weight}g)</div>
-            <div class="spec-item"><i class="fas fa-clock"></i> <strong>Autonomía:</strong> ~${Math.floor(estFlightTime)} min</div>
+            <div class="spec-item"><i class="fas fa-battery-full"></i> <strong>Batería:</strong> ${battery.name}</div>
+            <div class="spec-item"><i class="fas fa-clock"></i> <strong>Autonomía Est.:</strong> ~${Math.floor(flightTime)} min</div>
         </div>
 
-        <div style="margin-top:20px; border-top:1px solid #ccc; padding-top:15px; background: rgba(255,255,255,0.4); padding: 12px; border-radius: 6px;">
-            <h4 style="margin:0 0 8px 0;"><i class="fas fa-gavel"></i> Cumplimiento Normativo (AESA)</h4>
-            <p style="margin:3px 0;"><strong>Subcategoría:</strong> ${legal.subcategory}</p>
-            <p style="margin:3px 0;"><strong>Formación Requerida:</strong> ${legal.requirements}</p>
-            <p style="margin:3px 0; color: #d32f2f;"><strong>Limitación de Vuelo:</strong> ${legal.distance}</p>
-            <p style="margin:3px 0; font-size: 0.85em; color: #555;"><strong>Seguro RC:</strong> Exento si es recreativo < 20kg [5]</p>
+        <div class="legal-box">
+            <h4><i class="fas fa-gavel"></i> Perfil Legal AESA (España)</h4>
+            <p style="margin:4px 0;"><strong>Subcategoría:</strong> ${legal.subcategory}</p>
+            <p style="margin:4px 0;"><strong>Formación:</strong> ${legal.requirements}</p>
+            <p style="margin:4px 0; color:#d32f2f;"><strong>Restricción:</strong> ${legal.distance}</p>
+            <p style="margin:4px 0; font-size:12px; color:#555;"><strong>Nota:</strong> ${legal.registration} | ${legal.insurance}</p>
         </div>
 
-        <hr style="margin:20px 0; border:0; border-top:1px solid #ddd;">
+        <hr style="margin:20px 0; border:0; border-top: 1px solid #ddd;">
         
-        <div style="display: flex; justify-content: space-between; font-size: 1.1em;">
-            <span><strong>Peso Total (AUW):</strong> ${Math.round(auw)} g</span>
-            <span><strong>Relación Empuje/Peso:</strong> ${thrustRatio.toFixed(2)}:1</span>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+                <p style="margin:0;"><strong>Peso AUW:</strong> ${Math.round(auw)}g</p>
+                <p style="margin:0;"><strong>Relación Empuje:</strong> ${thrustRatio.toFixed(2)}:1</p>
+            </div>
+            <div style="text-align:right;">
+                <p style="font-size:22px; font-weight:bold; margin:0;">$${((frameWeight/2) + (motor.price * 4) + battery.price + 250).toFixed(2)}</p>
+                <span style="font-size:10px; color:#666;">Costo estimado hardware</span>
+            </div>
         </div>
-        <p style="margin-top:10px; font-weight: bold; font-size: 1.2em;">Costo Est. Componentes: $${(frameWeight/2 + (motor.price * 4) + battery.price + 250).toFixed(2)}</p>
     `;
-
 }
 </script>
 
 </body>
-</html>
 </html>
